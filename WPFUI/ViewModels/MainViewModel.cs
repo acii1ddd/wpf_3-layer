@@ -35,6 +35,7 @@ namespace WPFUI.ViewModels
             if (SelectedEntity == "Билеты")
             {
                 //CurrentView = new TicketViewModel();
+                //
             }
         }
 
