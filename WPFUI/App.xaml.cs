@@ -3,6 +3,7 @@ using System.Windows;
 using BLL.Configuration;
 using BLL.ServiceInterfaces;
 using WPFUI.ViewModels;
+using System.Configuration;
 
 namespace WPFUI
 {
@@ -11,25 +12,27 @@ namespace WPFUI
     /// </summary>
     public partial class App : Application
     {
-        //private ServiceProvider _serviceProvider;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             var services = new ServiceCollection();
-
-            services.ConfigureBLL("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=RailwayTicketingDB;Integrated Security=True");
-            services.ConfigureEfServices();
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<TicketViewModel>();
+            ConfigureServices(services);
 
             ServiceProvider _serviceProvider = services.BuildServiceProvider();
-            var ticketService = _serviceProvider.GetRequiredService<ITicketService>();
-            //var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = new MainWindow
+            {
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+            };
+            mainWindow.Show();
+        }
 
-            //var mainWindow = new MainWindow();
+        private void ConfigureServices(ServiceCollection services)
+        {
+            string efConnectionString = ConfigurationManager.ConnectionStrings["RailwayTicketingEF"].ConnectionString;
+            services.ConfigureEfServices();
+            services.ConfigureBLL(efConnectionString);
 
-            //mainWindow.DataContext = new TicketViewModel(ticketService);
-            //mainWindow.Show();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<TicketViewModel>();
         }
     }
 }

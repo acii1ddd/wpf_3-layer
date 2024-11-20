@@ -5,25 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="779">
+        Title="MainWindow" Height="450" Width="779" HorizontalAlignment="Center" VerticalAlignment="Top">
 
-    <DockPanel DockPanel.Dock="Top">
-        <Menu>
-            <MenuItem Header="Выберите">
-                <MenuItem Header="Вывод" Command="{Binding SnowCommand}"></MenuItem>
-                <MenuItem Header="Добавление" Command="{Binding AddCommand}"></MenuItem>
-                <MenuItem Header="Удаление" Command="{Binding DeleteCommand}"></MenuItem>
-                <MenuItem Header="Поиск" Command="{Binding SearchCommand}"></MenuItem>
-            </MenuItem>
+    <DockPanel Background="#FFF">
+        <Menu DockPanel.Dock="Top" Background="#FFFFF9F9" Height="28" FontSize="16" Margin="0 5 0 0">
+            <MenuItem Header="Вывод" Command="{Binding LoadCommand}"></MenuItem>
+            <MenuItem Header="Добавление" Command="{Binding AddCommand}"></MenuItem>
+            <MenuItem Header="Удаление" Command="{Binding DeleteCommand}"></MenuItem>
+            <MenuItem Header="Поиск" Command="{Binding SearchCommand}"></MenuItem>
         </Menu>
 
-        <StackPanel>
-            <ComboBox x:Name="EntityComboBox"
-                      Width="200" 
-                      Margin="10"
-                      ItemsSource="{Binding Entities}"
-                      SelectedItem="{Binding SelectedEntity}"/>
-            <ContentControl Content="{Binding CurrentView}" />
-        </StackPanel>
+        <Grid DockPanel.Dock="Bottom" Margin="5">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Row="0" Grid.Column="0"
+                      x:Name="EntitiesDataGrid"
+                      AutoGenerateColumns="True"
+                      CanUserAddRows="False"
+                      ItemsSource="{Binding EntityData}"/>
+
+            <StackPanel Grid.Row="0" Grid.Column="1">
+                <TextBlock Text="Выберите сущность:" FontSize="16" Margin="7 0 0 0"/>
+                <ComboBox x:Name="EntityComboBox"
+                          Width="183"
+                          FontSize="16"
+                          Margin="7 10 0 0"
+                          ItemsSource="{Binding Entities}"
+                          SelectedItem="{Binding SelectedEntity}"
+                          HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 </Window>

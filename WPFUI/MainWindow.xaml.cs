@@ -1,4 +1,5 @@
 ﻿using BLL.ServiceInterfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFUI.ViewModels;
+using BLL.Configuration;
+using System.Configuration;
 
 namespace WPFUI
 {
@@ -18,11 +21,9 @@ namespace WPFUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(/*ITicketService ticketService*/)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
-            //this.DataContext = ticketService;
         }
     }
 }

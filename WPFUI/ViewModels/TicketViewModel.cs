@@ -1,6 +1,5 @@
 ﻿using BLL.DTO;
 using BLL.ServiceInterfaces;
-using BLL.Services;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -24,7 +23,7 @@ namespace WPFUI.ViewModels
             LoadTicketsCommand = new RelayCommand(LoadTickets);
         }
 
-        private void LoadTickets()
+        public void LoadTickets()
         {
             var tickets = _ticketService.GetAll();
 
