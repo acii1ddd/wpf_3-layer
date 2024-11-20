@@ -1,0 +1,29 @@
+﻿<Window x:Class="WPFUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="779">
+
+    <DockPanel DockPanel.Dock="Top">
+        <Menu>
+            <MenuItem Header="Выберите">
+                <MenuItem Header="Вывод" Command="{Binding SnowCommand}"></MenuItem>
+                <MenuItem Header="Добавление" Command="{Binding AddCommand}"></MenuItem>
+                <MenuItem Header="Удаление" Command="{Binding DeleteCommand}"></MenuItem>
+                <MenuItem Header="Поиск" Command="{Binding SearchCommand}"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <StackPanel>
+            <ComboBox x:Name="EntityComboBox"
+                      Width="200" 
+                      Margin="10"
+                      ItemsSource="{Binding Entities}"
+                      SelectedItem="{Binding SelectedEntity}"/>
+            <ContentControl Content="{Binding CurrentView}" />
+        </StackPanel>
+    </DockPanel>
+</Window>
