@@ -1,26 +1,25 @@
 ﻿using BLL.DTO;
 using BLL.ServiceInterfaces;
-using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace WPFUI.ViewModels
 {
-    internal class TicketViewModel
+    internal class TicketViewModel : INotifyPropertyChanged
     {
+        private ObservableCollection<TicketDTO> _tickets = new ObservableCollection<TicketDTO>();
         private readonly ITicketService _ticketService;
-
-        // для отображения билетов в таблице
-        public ObservableCollection<TicketDTO> Tickets { get; private set; }
-        
-        // команда для загрузки данных
-        public ICommand LoadTicketsCommand { get; }
 
         public TicketViewModel(ITicketService ticketService)
         {
             _ticketService = ticketService;
-            Tickets = new ObservableCollection<TicketDTO>();
-            LoadTicketsCommand = new RelayCommand(LoadTickets);
+        }
+
+        internal ObservableCollection<TicketDTO> Tickets
+        {
+            get => _tickets;
+            set { _tickets = value; OnPropertyChanged(); }
         }
 
         public void LoadTickets()
@@ -28,11 +27,40 @@ namespace WPFUI.ViewModels
             var tickets = _ticketService.GetAll();
 
             // обновляет коллекцию Tickets
-            Tickets.Clear();
+            _tickets.Clear();
             foreach (var ticket in tickets)
             {
-                Tickets.Add(ticket);
+                _tickets.Add(ticket);
             }
+        }
+
+        internal void AddTicket(TicketDTO ticket)
+        {
+            _ticketService.Add(ticket); // в бд
+            _tickets.Add(ticket); // в коллекцию
+        }
+
+        internal void DeleteTicket(int ticketIdToDelete)
+        {
+            _ticketService.DeleteById(ticketIdToDelete); // из бд
+
+            var ticketToDelete = _tickets.FirstOrDefault(p => p.Id == ticketIdToDelete);
+            if (ticketToDelete != null)
+            {
+                // Удаляем объект из коллекции
+                _tickets.Remove(ticketToDelete);
+            }
+        }
+
+        internal TicketDTO SearchTicket(int ticketIdToSearch)
+        {
+            return _ticketService.GetById(ticketIdToSearch); // null либо passengerDTO
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace DAL.EFRepositories
         public Ticket Get(int id)
         {
             return _context.Tickets
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefault(t => t.Id == id); // ef не будет следить за изменениями в объектах (они будут находиться в только для чтения режиме)
         }
 

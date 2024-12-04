@@ -1,73 +1,30 @@
-﻿//using BLL.DTO;
-//using BLL.ServiceInterfaces;
-using BLL.DTO;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
+using DAL.Entities;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-//using System.ComponentModel;
-//using System.Windows.Input;
-
-
-//namespace WPFUI.ViewModels
-//{
-//    internal class MainViewModel
-//    {
-//        public ICommand AddCommand { get; }
-//        public ICommand DeleteCommand { get; }
-//        public ICommand SearchCommand { get; }
-
-//        // сервисы
-//        private readonly IPassengerService _passengerService;
-//        private readonly ITicketService _ticketService;
-//        private readonly ITrainService _trainService;
-
-//        // св-во для отображения в таблице
-
-//        public MainViewModel(/*IPassengerService passengerService, ITicketService ticketService, ITrainService trainService*/)
-//        {
-//            AddCommand = new RelayCommand(Add);
-//            DeleteCommand = new RelayCommand(Delete);
-//            SearchCommand = new RelayCommand(Search);
-
-//            // сервисы
-//            //_passengerService = passengerService;
-//            //_ticketService = ticketService;
-//            //_trainService = trainService;
-//        }
-
-//        private void Add()
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        private void Delete()
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        private void Search()
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        public event PropertyChangedEventHandler PropertyChanged;
-//        protected virtual void OnPropertyChanged(string propertyName) =>
-//            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-//    }
-//}
-
+using WPFUI.Views;
 
 namespace WPFUI.ViewModels
 {
-    internal class MainViewModel //: INotifyPropertyChanged
+    internal class MainViewModel : INotifyPropertyChanged
     {
-        private readonly TicketViewModel _ticketViewModel;
+        public  PassengerViewModel PassengerViewModel { get; }
+        public TicketViewModel TicketViewModel { get; }
+        public TrainViewModel TrainViewModel { get; }
 
         // список для выбора в comboBox
-        public ObservableCollection<string> Entities { get; }
+        public ObservableCollection<string> Entities { get; } = new ObservableCollection<string> { "Пассажиры", "Билеты", "Поезда" };
+
+        // команды для выполнения операций
+        public ICommand LoadCommand { get; }
+        public ICommand AddCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand SearchCommand { get; }
+
+
+        public ObservableCollection<object> TableData { get; set; }
 
         public string selectedEntity { get; set; }
 
@@ -79,39 +36,217 @@ namespace WPFUI.ViewModels
                 if (selectedEntity != value)
                 {
                     selectedEntity = value;
-                    //OnPropertyChanged(nameof(selectedEntity));
+                    OnPropertyChanged(nameof(selectedEntity));
                 }
             }
         }
 
-        // команды для выполнения операций
-        public ICommand LoadCommand { get; }
-
-        public ObservableCollection<object> EntityData { get; set; }
-
-        public MainViewModel(TicketViewModel ticketViewModel)
+        public MainViewModel(TicketViewModel ticketViewModel, PassengerViewModel passengerViewModel, TrainViewModel trainViewModel)
         {
             // views
-            _ticketViewModel = ticketViewModel;
-
-            Entities = new ObservableCollection<string> { "Пассажиры", "Билеты", "Поезда" };
+            PassengerViewModel = passengerViewModel;
+            TicketViewModel = ticketViewModel;
+            TrainViewModel = trainViewModel;
 
             // привязка команд
             LoadCommand = new RelayCommand(Load);
+            AddCommand = new RelayCommand(Add);
+            DeleteCommand = new RelayCommand(Delete);
+            SearchCommand = new RelayCommand(Search);
         }
 
-        void Load()
+        private void Load()
         {
-            if (selectedEntity == "Пассажиры")
+            switch (selectedEntity)
             {
-                //var tickets = _passengerService.GetAll().ToList();
-                //EntityData = new ObservableCollection<PassengerDTO>(passengers);
-                _ticketViewModel.LoadTickets();
+                case "Пассажиры":
+                    PassengerViewModel.LoadPassengers();
+                    TableData = new ObservableCollection<object>(PassengerViewModel.Passengers);
+                    OnPropertyChanged(nameof(TableData));
+                    break;
+
+                case "Билеты":
+                    TicketViewModel.LoadTickets();
+                    TableData = new ObservableCollection<object>(TicketViewModel.Tickets);
+                    OnPropertyChanged(nameof(TableData));
+                    break;
+
+                case "Поезда":
+                    TrainViewModel.LoadTrains();
+                    TableData = new ObservableCollection<object>(TrainViewModel.Trains);
+                    OnPropertyChanged(nameof(TableData));
+                    break;
+
+                default:
+                    break;
+            }            
+        }
+
+        private void Add()
+        {
+            switch (selectedEntity)
+            {
+                case "Пассажиры":
+                    var addPassengerWindow = new AddPassengerWindow();
+                    if (addPassengerWindow.ShowDialog() == true)
+                    {
+                        var newPassenger = addPassengerWindow.newPassenger;
+                        PassengerViewModel.AddPassenger(newPassenger);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(PassengerViewModel.Passengers);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                case "Билеты":
+                    var addTicketWindow = new AddTicketWindow();
+                    if (addTicketWindow.ShowDialog() == true)
+                    {
+                        var newTicket = addTicketWindow.newTicket;
+                        TicketViewModel.AddTicket(newTicket);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(TicketViewModel.Tickets);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                case "Поезда":
+                    var addTrainWindow = new AddTrainWindow();
+                    if (addTrainWindow.ShowDialog() == true)
+                    {
+                        var newTrain = addTrainWindow.newTrain;
+                        TrainViewModel.AddTrain(newTrain);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(TrainViewModel.Trains);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        //public event PropertyChangedEventHandler? PropertyChanged;
-        //protected virtual void OnPropertyChanged(string propertyName) =>
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void Delete()
+        {
+            switch (selectedEntity)
+            {
+                case "Пассажиры":
+                    var getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var passengerIdToDelete = getIdWindow.InputId;
+                        PassengerViewModel.DeletePassenger(passengerIdToDelete);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(PassengerViewModel.Passengers);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                case "Билеты":
+                    getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var ticketIdToDelete = getIdWindow.InputId;
+                        TicketViewModel.DeleteTicket(ticketIdToDelete);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(TicketViewModel.Tickets);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                case "Поезда":
+                    getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var trainsIdToDelete = getIdWindow.InputId;
+                        TrainViewModel.DeleteTrain(trainsIdToDelete);
+
+                        // изменения
+                        TableData = new ObservableCollection<object>(TrainViewModel.Trains);
+                        OnPropertyChanged(nameof(TableData));
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void Search()
+        {
+            switch (selectedEntity)
+            {
+                case "Пассажиры":
+                    var getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var passengerSearchId = getIdWindow.InputId;
+                        var passenger = PassengerViewModel.SearchPassenger(passengerSearchId);
+
+                        if (passenger != null)
+                        {
+                            MessageBox.Show($"Имя: {passenger.FirstName}; Фамилия: {passenger.SecondName}");
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Нет такого пассажира.");
+                        }
+                    }
+                    break;
+
+                case "Билеты":
+                    getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var ticketSearchId = getIdWindow.InputId;
+                        var ticket = TicketViewModel.SearchTicket(ticketSearchId);
+
+                        if (ticket != null)
+                        {
+                            MessageBox.Show($"Место оправления: {ticket.Source}; Место прибытия: {ticket.Destination}; " +
+                                            $"Дата отправления: {ticket.StartTime}; Время прибытия: {ticket.ArrivalTime}; " +
+                                            $"Номер вагона: {ticket.WagonNumber}; Номер места: {ticket.PlaceNumber}");
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Нет такого билета.");
+                        }
+                    }
+                    break;
+
+                case "Поезда":
+                    getIdWindow = new GetIdWindow(TableData);
+                    if (getIdWindow.ShowDialog() == true)
+                    {
+                        var trainSearchId = getIdWindow.InputId;
+                        var train = TrainViewModel.SearchTrain(trainSearchId);
+
+                        if (train != null)
+                        {
+                            MessageBox.Show($"Маршрут: {train.Route}; Количество мест: {train.Capacity}; Количество вагонов: {train.WagonCount}");
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Нет такого поезда.");
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

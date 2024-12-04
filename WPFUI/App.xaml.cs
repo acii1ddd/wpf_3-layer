@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using BLL.Configuration;
-using BLL.ServiceInterfaces;
 using WPFUI.ViewModels;
 using System.Configuration;
 
@@ -32,7 +31,10 @@ namespace WPFUI
             services.ConfigureBLL(efConnectionString);
 
             services.AddSingleton<MainViewModel>();
+            
+            services.AddSingleton<PassengerViewModel>();
             services.AddSingleton<TicketViewModel>();
+            services.AddSingleton<TrainViewModel>();
         }
     }
 }

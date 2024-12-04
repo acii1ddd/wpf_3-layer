@@ -29,7 +29,7 @@ namespace DAL.EFRepositories
         public Train Get(int id)
         {
             return _context.Trains
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefault(tr => tr.Id == id);
         }
 

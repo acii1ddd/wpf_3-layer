@@ -1,0 +1,18 @@
+﻿<Window x:Class="WPFUI.Views.AddTrainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI.Views"
+        mc:Ignorable="d"
+        Title="AddTrainWindow" Height="450" Width="800">
+    <StackPanel Margin="10">
+        <TextBlock Text="Маршрут:"/>
+        <TextBox x:Name="RouteTextBox" Margin="0,5"/>
+        <TextBlock Text="Количество мест:"/>
+        <TextBox x:Name="CapacityTextBox" Margin="0,5"/>
+        <TextBlock Text="Количество вагонов:"/>
+        <TextBox x:Name="WagonCountTextBox" Margin="0,5"/>
+        <Button Content="Добавить" Click="AddButton_Click" Margin="0,10"/>
+    </StackPanel>
+</Window>

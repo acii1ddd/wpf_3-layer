@@ -29,7 +29,7 @@ namespace BLL.Services
             var passenger = _passengerRepository.Get(id);
             if (passenger != null)
             {
-                _passengerRepository.Delete(passenger); 
+                _passengerRepository.Delete(passenger);
             }
         }
 

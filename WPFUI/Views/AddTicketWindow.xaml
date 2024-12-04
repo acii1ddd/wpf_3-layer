@@ -1,0 +1,22 @@
+﻿<Window x:Class="WPFUI.Views.AddTicketWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI.Views"
+        mc:Ignorable="d"
+        Title="AddTicketWindow" Height="450" Width="800">
+    <StackPanel Margin="10">
+        <TextBlock Text="Место отправления:"/>
+        <TextBox x:Name="SourceTextBox" Margin="0,5"/>
+        <TextBlock Text="Место прибытия:"/>
+        <TextBox x:Name="DestinationTextBox" Margin="0,5"/>
+        <DatePicker x:Name="StartTimeDatePicker" Margin="0,5"/>
+        <DatePicker x:Name="ArrivalTimeDatePicker" Margin="0,5"/>
+        <TextBlock Text="Номер вагона:"/>
+        <TextBox x:Name="WagonNumberTextBox" Margin="0,5"/>
+        <TextBlock Text="Номер места:"/>
+        <TextBox x:Name="PlaceNumberTextBox" Margin="0,5"/>
+        <Button Content="Добавить" Click="AddButton_Click" Margin="0,10"/>
+    </StackPanel>
+</Window>

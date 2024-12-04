@@ -2,7 +2,7 @@
 
 namespace BLL.DTO
 {
-    public class TrainDTO:IDTO
+    public class TrainDTO : IDTO
     {
         public int Id { get; set; }
 

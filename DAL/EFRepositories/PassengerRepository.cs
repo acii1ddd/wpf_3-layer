@@ -29,7 +29,7 @@ namespace DAL.EFRepositories
         public Passenger Get(int id)
         {
             return _context.Passengers
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefault(pas => pas.Id == id); // null by deafault
         }
 
