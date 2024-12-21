@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using DAL.Entities;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -84,49 +83,56 @@ namespace WPFUI.ViewModels
 
         private void Add()
         {
-            switch (selectedEntity)
+            try
             {
-                case "Пассажиры":
-                    var addPassengerWindow = new AddPassengerWindow();
-                    if (addPassengerWindow.ShowDialog() == true)
-                    {
-                        var newPassenger = addPassengerWindow.newPassenger;
-                        PassengerViewModel.AddPassenger(newPassenger);
+                switch (selectedEntity)
+                {
+                    case "Пассажиры":
+                        var addPassengerWindow = new AddPassengerWindow();
+                        if (addPassengerWindow.ShowDialog() == true)
+                        {
+                            var newPassenger = addPassengerWindow.newPassenger;
+                            PassengerViewModel.AddPassenger(newPassenger);
 
-                        // изменения
-                        TableData = new ObservableCollection<object>(PassengerViewModel.Passengers);
-                        OnPropertyChanged(nameof(TableData));
-                    }
-                    break;
+                            // изменения
+                            TableData = new ObservableCollection<object>(PassengerViewModel.Passengers);
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        break;
 
-                case "Билеты":
-                    var addTicketWindow = new AddTicketWindow();
-                    if (addTicketWindow.ShowDialog() == true)
-                    {
-                        var newTicket = addTicketWindow.newTicket;
-                        TicketViewModel.AddTicket(newTicket);
+                    case "Билеты":
+                        var addTicketWindow = new AddTicketWindow();
+                        if (addTicketWindow.ShowDialog() == true)
+                        {
+                            var newTicket = addTicketWindow.newTicket;
+                            TicketViewModel.AddTicket(newTicket);
 
-                        // изменения
-                        TableData = new ObservableCollection<object>(TicketViewModel.Tickets);
-                        OnPropertyChanged(nameof(TableData));
-                    }
-                    break;
+                            // изменения
+                            TableData = new ObservableCollection<object>(TicketViewModel.Tickets);
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        break;
 
-                case "Поезда":
-                    var addTrainWindow = new AddTrainWindow();
-                    if (addTrainWindow.ShowDialog() == true)
-                    {
-                        var newTrain = addTrainWindow.newTrain;
-                        TrainViewModel.AddTrain(newTrain);
+                    case "Поезда":
+                        var addTrainWindow = new AddTrainWindow();
+                        if (addTrainWindow.ShowDialog() == true)
+                        {
+                            var newTrain = addTrainWindow.newTrain;
+                            TrainViewModel.AddTrain(newTrain);
 
-                        // изменения
-                        TableData = new ObservableCollection<object>(TrainViewModel.Trains);
-                        OnPropertyChanged(nameof(TableData));
-                    }
-                    break;
+                            // изменения
+                            TableData = new ObservableCollection<object>(TrainViewModel.Trains);
+                            OnPropertyChanged(nameof(TableData));
+                        }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

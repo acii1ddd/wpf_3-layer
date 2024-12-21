@@ -2,6 +2,7 @@
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using DAL.EFRepositories;
 
 public static class ConfigurationExtensions
 {
@@ -13,8 +14,8 @@ public static class ConfigurationExtensions
         services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
         //services.AddScoped<IPassengerRepositor    y, DAL.EFRepositories.PassengerRepository>();
-        services.AddScoped<ITicketRepository, DAL.EFRepositories.TicketRepository>(); // в качетсве реализации ITicketRepository будет использоваться DAL.EFRepositories.TicketRepository>
-        services.AddScoped<ITrainRepository, DAL.EFRepositories.TrainRepository>(); // создается объект DAL.EFRepositories.TrainRepository и маппер к нему
+        services.AddScoped<ITicketRepository, TicketRepository>(); // в качетсве реализации ITicketRepository будет использоваться DAL.EFRepositories.TicketRepository>
+        services.AddScoped<ITrainRepository, TrainRepository>(); // создается объект DAL.EFRepositories.TrainRepository и маппер к нему
     }
 
     public static void ConfigurateDalFileServices(this IServiceCollection services, string csvFilePath)

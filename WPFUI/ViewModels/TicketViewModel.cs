@@ -36,8 +36,15 @@ namespace WPFUI.ViewModels
 
         internal void AddTicket(TicketDTO ticket)
         {
-            _ticketService.Add(ticket); // в бд
-            _tickets.Add(ticket); // в коллекцию
+            try
+            {
+                _ticketService.Add(ticket); // в бд
+                _tickets.Add(ticket); // в 
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         internal void DeleteTicket(int ticketIdToDelete)
